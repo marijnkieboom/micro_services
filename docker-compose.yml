@@ -8,8 +8,14 @@ services:
       MARIADB_USER: root
       MARIADB_PASSWORD: example
       MARIADB_DATABASE: cqrs_db
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
     depends_on:
-      - mariadb
+      mariadb:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
 
   query-service:
     container_name: query-service
@@ -17,8 +23,14 @@ services:
     environment:
       NODE_ENV: development
       MONGODB_URI: mongodb://mongo:27017/cqrs_db
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
     depends_on:
-      - mongo
+      mongo:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
 
   gateway:
     container_name: gateway
@@ -49,6 +61,21 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    command: --quiet # Reduce log verbosity
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672" # RabbitMQ main port
+      - "15672:15672" # RabbitMQ management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   mariadb_data:
