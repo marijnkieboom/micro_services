@@ -10,11 +10,11 @@ class EventPublisher {
   // Connect to RabbitMQ and create a channel
   async connect() {
     if (!this.connection) {
-      const user = process.env.RABBITMQ_USER || "guest";
-      const pass = process.env.RABBITMQ_PASSWORD || "guest";
-      const host = process.env.RABBITMQ_HOST || "rabbitmq";
+      const USER = process.env.RABBITMQ_USER;
+      const PASSWORD = process.env.RABBITMQ_PASSWORD;
+      const HOST = process.env.RABBITMQ_HOST;
 
-      const connectionString = `amqp://${user}:${pass}@${host}`;
+      const connectionString = `amqp://${USER}:${PASSWORD}@${HOST}`;
 
       this.connection = await amqp.connect(connectionString);
       this.channel = await this.connection.createChannel();

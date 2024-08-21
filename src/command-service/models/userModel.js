@@ -11,11 +11,11 @@ async function createUser(user) {
   const result = await DataSource.query(query, values);
 
   if (result.affectedRows > 0) {
+    console.log("User succesfully created");
     await EventPublisher.publishEvent("user.created", {
       id: result.insertId.toString(),
       ...user,
     });
-
     return true;
   }
 
@@ -28,6 +28,7 @@ async function updateUser(id, user) {
   const result = await DataSource.query(query, values);
 
   if (result.affectedRows > 0) {
+    console.log("User succesfully updated");
     await EventPublisher.publishEvent("user.updated", { id, ...user });
     return true;
   }
@@ -41,6 +42,7 @@ async function deleteUser(id) {
   const result = await DataSource.query(query, values);
 
   if (result.affectedRows > 0) {
+    console.log("User succesfully deleted");
     await EventPublisher.publishEvent("user.deleted", { id });
     return true;
   }

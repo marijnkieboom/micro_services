@@ -9,8 +9,8 @@ services:
       MARIADB_PASSWORD: example
       MARIADB_DATABASE: cqrs_db
       RABBITMQ_HOST: rabbitmq
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_USER: guest
+      RABBITMQ_PASSWORD: guest
     depends_on:
       mariadb:
         condition: service_started
@@ -39,6 +39,11 @@ services:
       - "3000:3000"
     environment:
       NODE_ENV: development
+      PORT: 3000
+      COMMAND_HOST: command-service
+      COMMAND_PORT: 3000
+      QUERY_HOST: query-service
+      QUERY_PORT: 3000
     depends_on:
       - command-service
       - query-service

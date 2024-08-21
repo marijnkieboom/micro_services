@@ -1,16 +1,24 @@
-function handleUserCreated(event) {
+const userModel = require("../models/userModel");
+
+async function handleUserCreated(event) {
   console.log("User Created Event:", event);
-  // Update your read model here
+
+  const { id, name, email } = event;
+  await userModel.createUser(id, name, email);
 }
 
-function handleUserUpdated(event) {
+async function handleUserUpdated(event) {
   console.log("User Updated Event:", event);
-  // Update your read model here
+
+  const { id, name, email } = event;
+  await userModel.updateUser(id, name, email);
 }
 
-function handleUserDeleted(event) {
+async function handleUserDeleted(event) {
   console.log("User Deleted Event:", event);
-  // Update your read model here
+
+  const { id } = event;
+  await userModel.deleteUser(id);
 }
 
 module.exports = {

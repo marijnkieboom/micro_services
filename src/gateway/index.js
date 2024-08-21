@@ -1,29 +1,12 @@
 const express = require("express");
-const { createProxyMiddleware } = require("http-proxy-middleware");
+const commandRoutes = require("./routes/commandRoutes");
+const queryRoutes = require("./routes/queryRoutes");
 
 const app = express();
 
-// Command service proxy
-const commandServiceProxy = createProxyMiddleware({
-  target: "http://command-service:3000",
-  changeOrigin: true,
-  pathRewrite: {
-    "^/command": "/", // strip "/command" from the path when forwarding to the command service
-  },
-});
-
-// Query service proxy
-const queryServiceProxy = createProxyMiddleware({
-  target: "http://query-service:3000",
-  changeOrigin: true,
-  pathRewrite: {
-    "^/query": "/", // strip "/query" from the path when forwarding to the query service
-  },
-});
-
-// Route requests to the appropriate service based on the URL path
-app.use("/command", commandServiceProxy);
-app.use("/query", queryServiceProxy);
+// Use the routes
+app.use("/command", commandRoutes);
+app.use("/query", queryRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

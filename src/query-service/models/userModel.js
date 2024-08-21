@@ -3,13 +3,11 @@ const { MongoClient, ObjectId } = require("mongodb");
 let db;
 const client = new MongoClient(process.env.MONGODB_URI);
 
-// Connect
 async function connect() {
   await client.connect();
   db = client.db();
 }
 
-// Get collection
 async function getUsersCollection() {
   if (!db) await connect();
   return db.collection("users");
@@ -30,10 +28,44 @@ async function getAllUsers() {
 }
 
 /**
+ * Event based updates to collection
+ */
+
+async function createUser(id, name, email) {
+  const users = await getUsersCollection();
+  const result = await users.insertOne({
+    _id: ObjectId.createFromHexString(id),
+    name,
+    email,
+  });
+  return result.acknowledged;
+}
+
+async function updateUser(id, name, email) {
+  const users = await getUsersCollection();
+  const result = await users.updateOne(
+    { _id: ObjectId.createFromHexString(id) },
+    { $set: { name, email } }
+  );
+  return result.acknowledged;
+}
+
+async function deleteUser(id) {
+  const users = await getUsersCollection();
+  const result = await users.deleteOne({
+    _id: ObjectId.createFromHexString(id),
+  });
+  return result.acknowledged;
+}
+
+/**
  * Exports
  */
 
 module.exports = {
   getUserById,
   getAllUsers,
+  createUser,
+  updateUser,
+  deleteUser,
 };
