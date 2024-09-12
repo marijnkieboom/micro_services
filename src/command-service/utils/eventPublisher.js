@@ -4,7 +4,7 @@ class EventPublisher {
   constructor() {
     this.connection = null;
     this.channel = null;
-    this.exchange = "commands";
+    this.exchange = "commands"; // Exchange name
   }
 
   // Connect to RabbitMQ and create a channel
@@ -18,21 +18,29 @@ class EventPublisher {
 
       this.connection = await amqp.connect(connectionString);
       this.channel = await this.connection.createChannel();
-      await this.channel.assertExchange(this.exchange, "topic", {
+
+      // Fanout exchange type
+      await this.channel.assertExchange(this.exchange, "fanout", {
         durable: true,
       });
     }
   }
 
   // Publish an event to the RabbitMQ exchange
-  async publishEvent(routingKey, event) {
+  async publishEvent(eventType, eventData) {
     if (!this.channel) {
       await this.connect();
     }
+
+    const message = {
+      eventType: eventType,
+      data: eventData,
+    };
+
     this.channel.publish(
       this.exchange,
-      routingKey,
-      Buffer.from(JSON.stringify(event)),
+      "", // Routing key is ignored for fanout exchanges
+      Buffer.from(JSON.stringify(message)),
       {
         persistent: true,
       }
