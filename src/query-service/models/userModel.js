@@ -18,11 +18,13 @@ async function getUsersCollection() {
  */
 
 async function getUserById(id) {
+  console.log("Query user with id:" + id);
   const users = await getUsersCollection();
   return await users.findOne({ _id: id });
 }
 
 async function getAllUsers() {
+  console.log("Query all users");
   const users = await getUsersCollection();
   return await users.find().toArray();
 }
