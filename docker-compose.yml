@@ -1,6 +1,5 @@
 services:
   command-service:
-    container_name: command-service
     build: ./src/command-service
     environment:
       NODE_ENV: development
@@ -18,7 +17,6 @@ services:
         condition: service_healthy
 
   query-service:
-    container_name: query-service
     build: ./src/query-service
     environment:
       NODE_ENV: development
@@ -33,7 +31,6 @@ services:
         condition: service_healthy
 
   gateway:
-    container_name: gateway
     build: ./src/gateway
     ports:
       - "3000:3000"
@@ -49,7 +46,6 @@ services:
       - query-service
 
   mariadb:
-    container_name: mariadb
     image: mariadb:latest
     environment:
       MYSQL_ROOT_PASSWORD: example
@@ -60,7 +56,6 @@ services:
       - mariadb_data:/var/lib/mysql
 
   mongo:
-    container_name: mongo
     image: mongo:latest
     ports:
       - "27017:27017"

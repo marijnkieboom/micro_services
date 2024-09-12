@@ -19,7 +19,7 @@ async function getUsersCollection() {
 
 async function getUserById(id) {
   const users = await getUsersCollection();
-  return await users.findOne({ _id: ObjectId.createFromHexString(id) });
+  return await users.findOne({ _id: id });
 }
 
 async function getAllUsers() {
@@ -33,28 +33,19 @@ async function getAllUsers() {
 
 async function createUser(id, name, email) {
   const users = await getUsersCollection();
-  const result = await users.insertOne({
-    _id: ObjectId.createFromHexString(id),
-    name,
-    email,
-  });
+  const result = await users.insertOne({ _id: id, name, email });
   return result.acknowledged;
 }
 
 async function updateUser(id, name, email) {
   const users = await getUsersCollection();
-  const result = await users.updateOne(
-    { _id: ObjectId.createFromHexString(id) },
-    { $set: { name, email } }
-  );
+  const result = await users.updateOne({ _id: id }, { $set: { name, email } });
   return result.acknowledged;
 }
 
 async function deleteUser(id) {
   const users = await getUsersCollection();
-  const result = await users.deleteOne({
-    _id: ObjectId.createFromHexString(id),
-  });
+  const result = await users.deleteOne({ _id: id });
   return result.acknowledged;
 }
 

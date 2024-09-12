@@ -20,13 +20,13 @@ curl -X POST http://localhost:3000/command/users -H "Content-Type: application/j
 Get All Users:
 
 ```
-curl http://localhost:3000/users
+curl http://localhost:3000/query/users
 ```
 
 Get a User by ID:
 
 ```
-curl http://localhost:3000/users/<user-id>
+curl http://localhost:3000/query/users/<user-id>
 ```
 
 Update a User:
