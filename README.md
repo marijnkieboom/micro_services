@@ -4,7 +4,27 @@
 docker compose up --build --force-recreate
 ```
 
-## Commands
+Windows users are advised to run this Docker container under WSL2 (Windows Subsystem for Linux). Mac and Linux users should be fine out-of-the-box.
+
+## Create Database `user` Table
+
+Connect to the MariaDB database (via DBeaver for instance), use credentials for root user, found in `docker-compose.yml`.
+
+Then add a `user` table using the following SQL-command:
+
+```SQL
+CREATE TABLE cqrs_db.users (
+	id INT auto_increment NOT NULL,
+	name varchar(255) NULL,
+	email varchar(255) NULL,
+	CONSTRAINT users_pk PRIMARY KEY (id)
+)
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4;
+```
+
+## Terminal Commands
+Once the Docker container is running, you can use the Terminal commands below to play with the database.
 
 Create a User:
 
